@@ -1,0 +1,9 @@
+/vendor/
+/var/
+/.php-cs-fixer.cache
+.phpunit.result.cache
+
+# Local IDE and OS files
+.idea/
+.vscode/
+.DS_Store

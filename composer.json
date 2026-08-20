@@ -1,0 +1,43 @@
+{
+    "name": "slpxxv/ksef-php-client",
+    "description": "A typed PHP client for KSeF API 2.0.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.4",
+        "phpseclib/phpseclib": "^3.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "php-parallel-lint/php-parallel-lint": "^1.4",
+        "phpstan/phpstan": "^2.2",
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "slpxxv\\ksef\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "slpxxv\\ksef\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "lint": "parallel-lint src tests",
+        "cs:check": "php-cs-fixer check --sequential --diff --verbose",
+        "cs:fix": "php-cs-fixer fix --sequential",
+        "stan": "phpstan analyse --debug --memory-limit=1G",
+        "test": "phpunit --testdox",
+        "security:audit": "composer audit --locked",
+        "qa": [
+            "@composer validate --strict",
+            "@lint",
+            "@cs:check",
+            "@stan",
+            "@test"
+        ]
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
