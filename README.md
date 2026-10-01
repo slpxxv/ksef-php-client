@@ -1,12 +1,14 @@
 # KSeF PHP Client
 
+[![CI](https://github.com/slpxxv/ksef-php-client/actions/workflows/ci.yml/badge.svg)](https://github.com/slpxxv/ksef-php-client/actions/workflows/ci.yml)
+
 Typed PHP client for the Polish National e-Invoice System (KSeF) API 2.0.
 
 The project provides a small, testable integration layer for authentication, public certificate discovery, encrypted online sessions, invoice submission, processing status polling and invoice retrieval.
 
 ## Highlights
 
-- PHP 8.2+
+- PHP 8.4+
 - PSR-4 autoloading with the `slpxxv\ksef` namespace
 - Action Pattern with dedicated Request and Response DTOs
 - Dynamic action creation behind a single `KsefClient` entry point
@@ -76,7 +78,35 @@ $status = $client->waitForInvoice(
 );
 
 echo $status['status']['description'] ?? 'Invoice processed.';
+
+// Download the invoice by the KSeF number assigned during processing.
+$downloadedXml = $client->invoice($status['ksefNumber']);
+file_put_contents(__DIR__ . '/downloaded-invoice.xml', $downloadedXml);
 ```
+
+## Supported features
+
+| Area | Feature | `KsefClient` method |
+|---|---|---|
+| Certificates | Public key certificates | `publicKeyCertificates()`, `publicKeyCertificate()` |
+| Authentication | Challenge | `challenge()` |
+| Authentication | KSeF token authentication | `authenticateWithKsefToken()`, `startKsefTokenAuthentication()` |
+| Authentication | Authentication status | `authenticationStatus()` |
+| Authentication | Access / refresh tokens | `redeemAuthenticationTokens()`, `refreshAccessToken()` |
+| Online session | Open / close | `openOnlineSession()`, `closeOnlineSession()` |
+| Online session | Session status and invoices | `sessionStatus()`, `sessionInvoices()`, `sessionInvoice()` |
+| Invoices | Send encrypted invoice | `sendInvoice()` |
+| Invoices | Wait for processing | `waitForInvoice()` |
+| Invoices | Download UPO | `sessionInvoiceUpo()` |
+| Invoices | Download by KSeF number | `invoice()` |
+| Invoices | Query metadata | `queryInvoiceMetadata()` |
+| KSeF tokens | Generate / list / get / revoke | `generateToken()`, `queryTokens()`, `token()`, `revokeToken()` |
+
+Not supported yet: XAdES signature authentication, batch sessions, invoice exports and permission management.
+
+## Project status
+
+Early development (`0.x`). The public API may change between minor versions until `1.0.0`. Unit test coverage is currently minimal; verify every integration in the Test or Demo environment first.
 
 ## Common operations
 
